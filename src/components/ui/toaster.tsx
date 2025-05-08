@@ -12,7 +12,7 @@ const ToastContext = createContext<{
   toast: (props: ToastProps) => void;
 }>({ toast: () => {} });
 
-export function Toaster({ children }: { children: React.ReactNode }) {
+export function Toaster({ children }: { children?: React.ReactNode }) {
   const [toast, setToast] = useState<ToastProps | null>(null);
 
   const showToast = (props: ToastProps) => {
