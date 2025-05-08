@@ -23,12 +23,12 @@ interface Activity {
   externalLink?: string;
 }
 
-type Props = {
+interface PageProps {
   params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export default function EditActivityPage({ params }: Props) {
+export default async function EditActivityPage({ params }: PageProps) {
   const router = useRouter();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
