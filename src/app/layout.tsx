@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'next/font/google'; // Changed from Geist to GeistSans for consistency
+import { GeistSans } from 'geist/font/sans';
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
-const geistSans = GeistSans({ // Updated variable name
+const geistSans = GeistSans({
   variable: '--font-geist-sans',
-  subsets: ['latin'], // Hebrew characters might need a different subset or font if Geist doesn't support them well. For now, this is standard.
+  subsets: ['latin'], 
 });
 
 
