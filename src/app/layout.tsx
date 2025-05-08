@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import './globals.css';
@@ -6,6 +5,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
+import { ToastProvider } from '@/components/ui/toast-provider';
 
 // GeistSans from 'geist/font/sans' is an object, not a function to be called.
 // It directly provides properties like .variable.
@@ -31,7 +31,9 @@ export default function RootLayout({
         <div className="relative flex min-h-dvh flex-col">
           <Header />
           <main className="flex-1 py-8">
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </main>
           <Footer />
         </div>

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { createContext, useContext, useState } from 'react';
 
@@ -9,10 +9,10 @@ interface ToastProps {
 }
 
 const ToastContext = createContext<{
-  toast: (props: ToastProps) => void;
-}>({ toast: () => {} });
+  showToast: (props: ToastProps) => void;
+}>({ showToast: () => {} });
 
-export function Toaster({ children }: { children: React.ReactNode }) {
+export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState<ToastProps | null>(null);
 
   const showToast = (props: ToastProps) => {
@@ -21,7 +21,7 @@ export function Toaster({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ToastContext.Provider value={{ toast: showToast }}>
+    <ToastContext.Provider value={{ showToast }}>
       {children}
       {toast && (
         <div className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
