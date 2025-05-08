@@ -1,13 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, Suspense } from 'react';
-import type { Activity, SportType, Audience } from '@/lib/types';
-import { DUMMY_ACTIVITIES } from '@/lib/constants';
-import { ActivityCard } from '@/components/activity-card';
-import { ActivitiesFilter } from '@/components/activities-filter';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import {fetchDocuments} from "@/lib/db";
+import { Suspense } from 'react';
 import ActivityList from './ActivityList';
 import { Skeleton } from '@/components/ui/skeleton';
 
