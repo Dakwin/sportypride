@@ -6,7 +6,7 @@ export const AUDIENCE_TYPES: Audience[] = ["All", "Women Only", "Men Only"];
 export const DUMMY_ACTIVITIES: Activity[] = [
   {
     id: "1",
-    name: "Morning Tennis Match",
+    name: "Morning suck her Match",
     description: "Friendly tennis game to start the day. All levels welcome!",
     location: "Central Park Tennis Courts",
     time: "Tuesdays & Thursdays, 7:00 AM - 8:30 AM",
