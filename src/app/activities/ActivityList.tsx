@@ -11,10 +11,7 @@ interface Activity {
   name: string;
   description: string;
   location: string;
-  time: {
-    _seconds: number;
-    _nanoseconds: number;
-  };
+  time: string;
   sportType: string;
   audience: string;
   contactInfo: string;
@@ -56,20 +53,45 @@ export default function ActivityList() {
     return `/images/activities/${normalizedType}.jpg`;
   };
 
+  const formatDate = (time: string) => {
+    // If it's a recurring time string (contains & or every), return it as is
+    if (time.includes('&') || time.includes('every')) {
+      return time;
+    }
+
+    try {
+      const date = new Date(time);
+      if (isNaN(date.getTime())) {
+        return time; // Return original string if date is invalid
+      }
+      return date.toLocaleString('he-IL', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return time; // Return original string on error
+    }
+  };
+
   // Filter activities by audience
   const filteredActivities = activities.filter(activity => 
     selectedAudience === "All" || activity.audience === selectedAudience
   );
 
   // Group activities by sport type
-  const groupedActivities = filteredActivities.reduce((groups, activity) => {
+  const groupedActivities = filteredActivities.reduce((groups: Record<string, Activity[]>, activity) => {
     const sportType = activity.sportType;
     if (!groups[sportType]) {
       groups[sportType] = [];
     }
     groups[sportType].push(activity);
     return groups;
-  }, {} as Record<string, Activity[]>);
+  }, {});
 
   return (
     <div className="space-y-8">
@@ -111,14 +133,7 @@ export default function ActivityList() {
                 <p className="text-gray-600 mb-2">{activity.description}</p>
                 <div className="text-sm text-gray-500">
                   <p>📍 {activity.location}</p>
-                  <p>🕒 {new Date(activity.time._seconds * 1000).toLocaleString([], { 
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}</p>
+                  <p>🕒 {formatDate(activity.time)}</p>
                   <p>👥 {activity.audience}</p>
                   <p>📞 {activity.contactInfo}</p>
                 </div>

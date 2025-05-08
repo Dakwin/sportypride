@@ -38,9 +38,25 @@ export async function POST(request: Request) {
       );
     }
 
+    // Convert time to ISO format if it's not already
+    let timeValue = activityData.time;
+    if (typeof timeValue === 'string' && !timeValue.match(/^\d{4}-\d{2}-\d{2}/)) {
+      // If it's a recurring time string, store it as is
+      if (timeValue.includes('&') || timeValue.includes('every')) {
+        timeValue = timeValue;
+      } else {
+        // Try to parse the date string
+        const parsedDate = new Date(timeValue);
+        if (!isNaN(parsedDate.getTime())) {
+          timeValue = parsedDate.toISOString();
+        }
+      }
+    }
+
     // Create the activity document
     const activityRef = await adminDb.collection('activities').add({
       ...activityData,
+      time: timeValue,
       createdAt: new Date()
     });
 

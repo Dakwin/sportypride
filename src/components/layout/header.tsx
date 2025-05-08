@@ -4,8 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, ActivitySquare } from 'lucide-react';
 
 const navItems = [
-  { href: '/', label: 'בית' },
-  { href: '/activities', label: 'פעילויות' },
+  { href: '/', label: 'פעילויות' },
   { href: '/contact', label: 'צור קשר / אודות' },
 ];
 
