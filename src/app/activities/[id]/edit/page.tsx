@@ -23,11 +23,12 @@ interface Activity {
   externalLink?: string;
 }
 
-export default function EditActivityPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export default function EditActivityPage({ params }: Props) {
   const router = useRouter();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
