@@ -27,6 +27,17 @@ export async function POST(request: Request) {
   try {
     const activityData = await request.json();
 
+    // Validate required fields
+    const requiredFields = ['name', 'description', 'location', 'time', 'sportType', 'audience'];
+    const missingFields = requiredFields.filter(field => !activityData[field]);
+    
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        { error: `Missing required fields: ${missingFields.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
     // Create the activity document
     const activityRef = await adminDb.collection('activities').add({
       ...activityData,
