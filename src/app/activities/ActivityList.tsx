@@ -16,7 +16,6 @@ interface Activity {
   sportType: string;
   audience: string;
   contactInfo: string;
-  image: string;
 }
 
 export default function ActivityList() {
@@ -31,7 +30,6 @@ export default function ActivityList() {
           throw new Error('Failed to fetch activities');
         }
         const data = await response.json();
-        console.log(data);
         setActivities(data.activities);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -49,13 +47,19 @@ export default function ActivityList() {
     );
   }
 
+  const getImagePath = (sportType: string) => {
+    // Convert sport type to lowercase and remove spaces for filename matching
+    const normalizedType = sportType.toLowerCase().replace(/\s+/g, '');
+    return `/images/activities/${normalizedType}.jpg`;
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {activities.map((activity) => (
         <Card key={activity.id} className="p-6">
           <div className="relative w-full h-48 mb-4">
             <Image
-              src={activity.image}
+              src={getImagePath(activity.sportType)}
               alt={activity.name}
               fill
               className="object-cover rounded-lg"
