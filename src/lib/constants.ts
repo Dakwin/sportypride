@@ -12,6 +12,7 @@ export const ACTIVITY_TYPES = {
   RUNNING: 'Running',
   SWIMMING: 'Swimming',
   CYCLING: 'Cycling',
+  FOOTBALL: 'FOOTBALL',
 } as const;
 
 export const ACTIVITY_IMAGES = {
