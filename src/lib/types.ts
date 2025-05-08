@@ -1,4 +1,3 @@
-
 export type SportType = "Tennis" | "Beach Volleyball" | "Cycling" | "Yoga" | "Running";
 export type Audience = "All" | "Women Only" | "Men Only";
 

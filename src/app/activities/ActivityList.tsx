@@ -25,13 +25,11 @@ interface Activity {
   name: string;
   description: string;
   location: string;
-  time: {
-    _seconds: number;
-    _nanoseconds: number;
-  };
+  time: string;
   sportType: string;
   audience: string;
   contactInfo: string;
+  externalLink?: string;
 }
 
 export default function ActivityList() {
@@ -156,14 +154,7 @@ export default function ActivityList() {
                 <p className="text-gray-600 mb-2">{activity.description}</p>
                 <div className="text-sm text-gray-500">
                   <p>📍 {activity.location}</p>
-                  <p>🕒 {new Date(activity.time._seconds * 1000).toLocaleString([], { 
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}</p>
+                  <p>🕒 {activity.time}</p>
                   <p>🏃 {activity.sportType}</p>
                   <p>👥 {activity.audience}</p>
                   <p>📞 {activity.contactInfo}</p>
