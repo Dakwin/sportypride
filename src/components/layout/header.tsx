@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, ActivitySquare } from 'lucide-react';
 
 const navItems = [
@@ -11,7 +11,7 @@ const navItems = [
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
+      <div className="container mx-auto px-4 flex h-16 max-w-screen-2xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <ActivitySquare className="h-7 w-7 text-primary" />
           <span className="font-bold text-lg">Active Hub</span>
@@ -39,6 +39,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <SheetTitle className="sr-only">תפריט ניווט</SheetTitle>
               <nav className="flex flex-col gap-6 p-6">
                 <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
                   <ActivitySquare className="h-7 w-7 text-primary" />
