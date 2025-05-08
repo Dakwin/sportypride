@@ -23,7 +23,11 @@ interface Activity {
   externalLink?: string;
 }
 
-export default function EditActivityPage({ params }: { params: { id: string } }) {
+export default function EditActivityPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
