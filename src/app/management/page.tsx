@@ -53,9 +53,22 @@ export default function ManagementPage() {
         throw new Error('Failed to save activity');
       }
 
+      // Close the form dialog
+      setIsFormOpen(false);
+      
       // Refresh the page to show updated data
       router.refresh();
+      
+      toast({
+        title: selectedActivity ? "פעילות עודכנה בהצלחה" : "פעילות נוספה בהצלחה",
+        description: selectedActivity ? "הפעילות עודכנה במערכת" : "הפעילות נוספה למערכת",
+      });
     } catch (error) {
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בעת שמירת הפעילות",
+        variant: "destructive",
+      });
       throw error;
     }
   };

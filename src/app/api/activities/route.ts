@@ -130,4 +130,28 @@ export async function PUT(request: Request) {
       { status: 500 }
     );
   }
+}
+
+// DELETE handler for removing activities
+export async function DELETE(request: Request) {
+  try {
+    const { id } = await request.json();
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Activity ID is required' },
+        { status: 400 }
+      );
+    }
+
+    await adminDb.collection('activities').doc(id).delete();
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete activity' },
+      { status: 500 }
+    );
+  }
 } 

@@ -6,35 +6,74 @@ import Image from 'next/image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Button } from '@/components/ui/button';
-import { Pencil } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { AUDIENCE_TYPES } from '@/lib/constants';
 import type { Activity } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface ActivityListProps {
   onEdit?: (activity: Activity) => void;
 }
 
 export default function ActivityList({ onEdit }: ActivityListProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedAudience, setSelectedAudience] = useState<string>("All");
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch('/api/activities');
+      if (!response.ok) {
+        throw new Error('Failed to fetch activities');
+      }
+      const data = await response.json();
+      setActivities(data.activities);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    }
+  };
 
   useEffect(() => {
-    async function fetchActivities() {
-      try {
-        const response = await fetch('/api/activities');
-        if (!response.ok) {
-          throw new Error('Failed to fetch activities');
-        }
-        const data = await response.json();
-        setActivities(data.activities);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      }
-    }
-
     fetchActivities();
   }, []);
+
+  const handleDelete = async (activityId: string) => {
+    try {
+      setIsDeleting(activityId);
+      const response = await fetch('/api/activities', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: activityId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete activity');
+      }
+
+      toast({
+        title: "פעילות נמחקה בהצלחה",
+        description: "הפעילות הוסרה מהמערכת",
+      });
+
+      // Refresh the page to show updated data
+      router.refresh();
+      await fetchActivities();
+    } catch (error) {
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בעת מחיקת הפעילות",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(null);
+    }
+  };
 
   if (error) {
     return (
@@ -127,14 +166,23 @@ export default function ActivityList({ onEdit }: ActivityListProps) {
                     className="object-cover w-full h-full"
                   />
                   {onEdit && (
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="absolute top-2 right-2"
-                      onClick={() => onEdit(activity)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
+                    <div className="absolute top-2 right-2 flex gap-2">
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() => onEdit(activity)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => handleDelete(activity.id)}
+                        disabled={isDeleting === activity.id}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
                 </div>
                 <CardHeader>
