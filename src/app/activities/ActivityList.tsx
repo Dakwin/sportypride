@@ -1,23 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-react';
+import { AUDIENCE_TYPES } from '@/lib/constants';
+import type { Activity } from '@/lib/types';
 
-interface Activity {
-  id: string;
-  name: string;
-  description: string;
-  location: string;
-  time: string;
-  sportType: string;
-  audience: string;
-  contactInfo: string;
+interface ActivityListProps {
+  onEdit?: (activity: Activity) => void;
 }
 
-export default function ActivityList() {
+export default function ActivityList({ onEdit }: ActivityListProps) {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedAudience, setSelectedAudience] = useState<string>("All");
@@ -103,12 +100,14 @@ export default function ActivityList() {
           onValueChange={setSelectedAudience}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select audience" />
+            <SelectValue placeholder="בחר קהל יעד" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All</SelectItem>
-            <SelectItem value="Women Only">Women Only</SelectItem>
-            <SelectItem value="Men Only">Men Only</SelectItem>
+            {AUDIENCE_TYPES.map((type) => (
+              <SelectItem key={type} value={type}>
+                {type === 'All' ? 'כולם' : type === 'Women Only' ? 'נשים בלבד' : 'גברים בלבד'}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -116,27 +115,46 @@ export default function ActivityList() {
       {/* Grouped Activities */}
       {Object.entries(groupedActivities).map(([sportType, activities]) => (
         <div key={sportType} className="space-y-4">
-          <h2 className="text-2xl font-bold">{sportType}</h2>
+          <h2 className="text-2xl font-bold text-primary">{sportType}</h2>
           <Separator className="my-4" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activities.map((activity) => (
-              <Card key={activity.id} className="p-6">
-                <div className="relative w-full h-48 mb-4">
-                  <Image
+              <Card key={activity.id} className="overflow-hidden">
+                <div className="aspect-video relative">
+                  <img
                     src={getImagePath(activity.sportType)}
                     alt={activity.name}
-                    fill
-                    className="object-cover rounded-lg"
+                    className="object-cover w-full h-full"
                   />
+                  {onEdit && (
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute top-2 right-2"
+                      onClick={() => onEdit(activity)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
-                <h2 className="text-xl font-semibold mb-2">{activity.name}</h2>
-                <p className="text-gray-600 mb-2">{activity.description}</p>
-                <div className="text-sm text-gray-500">
-                  <p>📍 {activity.location}</p>
-                  <p>🕒 {formatDate(activity.time)}</p>
-                  <p>👥 {activity.audience}</p>
-                  <p>📞 {activity.contactInfo}</p>
-                </div>
+                <CardHeader>
+                  <CardTitle>{activity.name}</CardTitle>
+                  <CardDescription>{formatDate(activity.time)}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-2">{activity.description}</p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-medium">מיקום:</span>
+                    <span>{activity.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm mt-1">
+                    <span className="font-medium">קהל יעד:</span>
+                    <span>
+                      {activity.audience === 'All' ? 'כולם' : 
+                       activity.audience === 'Women Only' ? 'נשים בלבד' : 'גברים בלבד'}
+                    </span>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>
