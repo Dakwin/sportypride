@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { env } from '@/lib/env';
 
 export function middleware(request: NextRequest) {
   // Check if the request is for the management page
@@ -11,10 +12,9 @@ export function middleware(request: NextRequest) {
 
     // Get the admin password from cookies
     const adminPassword = request.cookies.get('admin_password')?.value;
-    const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
     // If no password cookie or incorrect password, redirect to login
-    if (!adminPassword || adminPassword !== ADMIN_PASSWORD) {
+    if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
       return NextResponse.redirect(new URL('/management/login', request.url));
     }
   }

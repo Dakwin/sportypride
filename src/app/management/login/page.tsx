@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { env } from '@/lib/env';
 
 export default function ManagementLoginPage() {
   const [password, setPassword] = useState('');
@@ -15,9 +16,7 @@ export default function ManagementLoginPage() {
   const { toast } = useToast();
 
   const handleLogin = () => {
-    const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
-
-    if (password === ADMIN_PASSWORD) {
+    if (password === env.ADMIN_PASSWORD) {
       // Set cookie for authentication
       document.cookie = `admin_password=${password}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
       router.push('/management');
